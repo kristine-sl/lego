@@ -37,8 +37,33 @@ main
 	line-height: 1.2; 
 }
 
+.modal-dialog, .poker-modal, .modal-content, .modal-body
+{
+	height: 100%;
+}
+
+.modal-dialog
+{
+	padding: 20px;
+    margin: 0;
+    width: 100%;
+}
+
+.poker-modal .modal-body
+{
+	display: flex; 
+	justify-content: center;
+	align-items: center;
+}
+
 .poker-modal .modal-body h1
 {
-	font-size: 180px; 
-	padding: 100px 0px; 
+	font-size: 150px; 
+}
+
+.poker-modal .modal-footer
+{
+	position: absolute;
+    bottom: 0;
+    width: 100%;
 }
