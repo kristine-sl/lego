@@ -7,82 +7,114 @@
         <meta name = 'description' content = ''>
         <meta name = 'viewport' content = 'width=device-width, initial-scale=1'>
 
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
         <link rel = 'stylesheet' href = 'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css'>
+        <link rel = 'stylesheet' href = 'assets/css/bootstrap.css'>
         <link rel = 'stylesheet' href = 'assets/css/main.css'>
     </head>
     <body ng-controller = 'LegoController as lego'>
 
         <header>
-
-            <h1>Praktisk bruk av Scrum</h1>
-            <h4>Lego</h4>
+            <div class = 'header-section'>
+                <h2>Praktisk bruk av Scrum: <strong>Lego</strong></h2>
+            </div>
+            <div class = 'header-section text-right'>
+                <h2>
+                   <span class = 'iteration' ng-class = "{ 'header-active': lego.currentIteration == 0 }" ng-click = 'lego.changeIteration( 0 )'>Iterasjon 1</span>
+                   <span class = 'iteration-divider'>|</span>
+                   <span class = 'iteration' ng-class = "{ 'header-active': lego.currentIteration == 1 }" ng-click = 'lego.changeIteration( 1 )'>Iterasjon 2</span>
+               </h2>
+            </div>
 
         </header>
 
         <main>
+            <uib-tabset justified='true'>
+                <uib-tab heading='Estimering' ng-click = 'lego.changeSection( 0 )'></uib-tab>
+                <uib-tab heading='Godkjennelse' ng-click = 'lego.changeSection( 1 )'></uib-tab>
+                <uib-tab heading='Utvikling' ng-click = 'lego.changeSection( 2 )'></uib-tab>
+                <uib-tab heading='Demo/Retrospektiv' ng-click = 'lego.changeSection( 3 )'></uib-tab>
+            </uib-tabset> 
 
-            <h2>Iterasjon X</h2>
-            <div>
-                <a ng-click = 'lego.currentSection = 0'>Estimering</a>
-                <a ng-click = 'lego.currentSection = 1'>Godkjennelse</a>
-                <a ng-click = 'lego.currentSection = 2'>Utvikling</a>
-                <a ng-click = 'lego.currentSection = 3'>Demo/Retrospektiv</a>
-            </div>
-            <section ng-show = 'lego.currentSection == 0'>
-                <ul>
-                    <li>Få en oversikt over oppgavene</li>
-                    <li>
-                        <span>Estimer oppgavene med planning poker</span>
-                        <ul>
-                            <li>Estimer minimum 10 oppgaver</li>
-                        </ul>
-                    </li>
-                    <li>Plasser oppgavene i produktbackloggen</li>
-                </ul>
-            </section>
-            <section ng-show = 'lego.currentSection == 1'>
-                <ul>
-                    <li>Prioriter oppgavene</li>
-                    <li>Velg ut passe mengde oppgaver for 12 minutter</li>
-                    <li>Godkjennelse av kunde</li>
-                </ul>
-            </section>
-            <section ng-show = 'lego.currentSection == 2'>
-                <ul>
-                    <li>Bygg lego</li>
-                    <li>Oppdater Scrum-boardet løpende</li>
-                    <li>Daily standup</li>
-                </ul>
-            </section>
-            <section ng-show = 'lego.currentSection == 3'>
-                <ul>
-                    <li>
-                        <span>Demo</span>
-                        <ul>
-                            <li>Verifiser test</li>
-                        </ul>
-                    </li>
-                    <li>Kalkuler poeng og story points</li>
-                    <li>
-                        <span>Retrospektiv</span>
-                        <ul>
-                            <li>3 ting som var bra</li>
-                            <li>3 ting som kan bli bedre</li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
+            <div class = 'Container'>
+                
+                <div class = 'timer-container'>
+                    <h1 class = 'text-center timer' >{{ lego.minutes }}:{{ lego.seconds }}</h1>
+                    <div class = 'text-center'>
+                        <button class = 'btn btn-success btn-lg' ng-if = '! lego.iterations[lego.currentIteration].sections[lego.currentSection].running' ng-click = 'lego.startTimer()'>Start timer</button>
+                        <button class = 'btn btn-warning btn-lg'ng-if = 'lego.iterations[lego.currentIteration].sections[lego.currentSection].running' ng-click = 'lego.pauseTimer()'>Pause timer</button>
+                        <button class = 'btn btn-danger btn-lg' ng-click = 'lego.resetTimer()'>Reset timer</button>
+                    </div>
+                </div>
 
-            <div>
-                {{ lego.minutes }}:{{ lego.seconds }}
-                <button ng-if = '! lego.countingDown' ng-click = 'lego.startTimer( lego.currentIteration, lego.currentSection )'>Start timer</button>
-                <button ng-if = 'lego.countingDown' ng-click = 'lego.pauseTimer()'>Stopp timer</button>
-            </div>
+                <div class = 'tasks-container'>
+                    <section ng-show = 'lego.currentSection == 0 '>
+                        <ul>
+                            <li>Få en oversikt over oppgavene</li>
+                            <li>
+                                <span>Estimer oppgavene med planning poker</span>
+                                <ul>
+                                    <li>Estimer minimum 10 oppgaver</li>
+                                </ul>
+                            </li>
+                            <li>Plasser oppgavene i produktbackloggen</li>
+                        </ul>
+                    </section>
+                    <section ng-show = 'lego.currentSection == 1 '>
+                        <ul>
+                            <li>Prioriter oppgavene</li>
+                            <li>Velg ut passe mengde oppgaver for 12 minutter</li>
+                            <li>Godkjennelse av kunde</li>
+                        </ul>
+                    </section>
+                    <section ng-show = 'lego.currentSection == 2 '>
+                        <ul>
+                            <li>Bygg lego</li>
+                            <li>Oppdater Scrum-boardet løpende</li>
+                            <li>Daily standup</li>
+                        </ul>
+                    </section>
+                    <section ng-show = 'lego.currentSection == 3 '>
+                        <ul>
+                            <li>
+                                <span>Demo</span>
+                                <ul>
+                                    <li>Verifiser test</li>
+                                </ul>
+                            </li>
+                            <li>Kalkuler poeng og story points</li>
+                            <li>
+                                <span>Retrospektiv</span>
+                                <ul>
+                                    <li>3 ting som var bra</li>
+                                    <li>3 ting som kan bli bedre</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>  
 
         </main>
 
-        <script src = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js'></script>
-        <script src = 'app.js'></script>
+        <script type="text/ng-template" id="modal-content.html">
+            <div class = 'modal-header'><h3>Daily standup!</h3></div>
+            <div class = 'modal-body'>
+            På tide med daily standup!
+            <ul>
+                <li>Hva har du gjort?</li>
+                <li>Hva skal du gjøre?</li>
+                <li>Er det noe som står i veien for at du får gjort det du skal?</li>
+            </ul>
+            </div>
+            <div class = 'modal-footer'>
+                <button class = 'btn btn-success btn-lg' ng-click = ' finished() '>Ferdig!</button>
+            </div>
+        </script>
 
+        <script src = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js'></script>
+        <script src = 'bower_components/angular-bootstrap/ui-bootstrap.min.js'></script>
+        <script src = 'assets/js/ui-bootstrap-tpls-0.14.0.min.js'></script>
+        <script src = 'app.js'></script>
     </body>
 </html>

@@ -1,88 +1,214 @@
-angular.module( 'app', [] )
-    .controller( 'LegoController', function( $interval ) {
+angular.module( 'app', [ 'ui.bootstrap' ] )
+    .controller( 'LegoController', function( $interval, $scope, $uibModal ) {
+
+        $scope.alert = false; 
         var vm = this;
 
-        vm.timer = 0;
-        vm.countingDown = false;
-        vm.minutes = 0;
-        vm.seconds = 0;
         vm.currentIteration = 0;
         vm.currentSection = 0;
+
         vm.iterations = [
             {
                 sections: [
                     {
                         duration: 1800,
+                        timer: 0, 
+                        running: false
+                    },
+                    {
+                        duration: 180,
+                        timer: 0,
+                        running: false
+                    },
+                    {
+                        duration: 720,
+                        timer: 0,
+                        running: false, 
                         alerts: [
                             {
-                                after: 10,
-                                text: 'Hello world'
+                                after: 3,
+                                text: 'Daily standup!'
                             }
                         ]
                     },
                     {
-                        duration: 180
-                    },
-                    {
-                        duration: 720
-                    },
-                    {
-                        duration: 900
+                        duration: 900,
+                        timer: 0,
+                        running: false
                     }
                 ]
             },
             {
                 sections: [
                     {
-                        duration: 900
+                        duration: 900,
+                        timer: 0,
+                        running: false
                     },
                     {
-                        duration: 180
+                        duration: 180,
+                        timer: 0,
+                        running: false
                     },
                     {
-                        duration: 720
+                        duration: 720,
+                        timer: 0,
+                        running: false
                     },
                     {
-                        duration: 900
+                        duration: 900,
+                        timer: 0,
+                        running: false
                     }
                 ]
             }
         ];
 
-        var interval;
+        vm.resetTimer = function() {
+            var duration = vm.iterations[vm.currentIteration].sections[vm.currentSection].duration;
+            vm.iterations[vm.currentIteration].sections[vm.currentSection].timer = duration; 
+            setMinutesAndSeconds(duration); 
+        }
 
-        vm.startTimer = function( iteration, section ) {
-            vm.countingDown = true;
-            var section = vm.iterations[ iteration ].sections[ section ];
+        function resetAllTimers() {
 
-            if ( vm.timer == 0 ) {
-                vm.timer = section.duration;
+            for(var i = 0; i < vm.iterations; i++) {
+
+                for(var j = 0; j < iterations[i].sections.length; j++) {
+
+                    sections[j].timer = sections[j].duration; 
+                    sections[j].running = false; 
+                }
             }
+        }
+
+        vm.resetTimer(); 
+
+        var intervalRunning = false;
+        var interval; 
+
+        function startInterval() {
+
+            var sections = vm.iterations[ vm.currentIteration ].sections; 
+
+            var noneRunning = true;
 
             interval = $interval( function() {
-                vm.minutes = parseInt( vm.timer / 60, 10 );
-                vm.seconds = parseInt( vm.timer % 60, 10 );
 
-                vm.minutes = vm.minutes < 10 ? '0' + vm.minutes : vm.minutes;
-                vm.seconds = vm.seconds < 10 ? '0' + vm.seconds : vm.seconds;
+                var currentlyRunning = 0; 
 
-                if ( section.alerts.length > 0 ) {
-                    for ( var index = 0; index < section.alerts.length; index ++ ) {
-                        var alertTime = section.duration - section.alerts[ index ].after;
-                        if ( vm.timer == alertTime ) {
-                            vm.pauseTimer();
-                            alert( section.alerts[ index ].text );
+                for( var i = 0; i < sections.length; i++ ){
+
+                    if( sections[i].running ){
+
+                        sections[i].timer--; 
+                        currentlyRunning++;  
+                    }
+
+                    var section = sections[i]; 
+
+                    if( 'alerts' in section && section.alerts.length > 0 ) {
+
+                        for ( var index = 0; index < section.alerts.length; index ++ ) {
+
+                            var alertTime = section.duration - section.alerts[ index ].after;
+
+                            if ( section.timer == alertTime && !$scope.alert) {
+
+                                vm.pauseTimer();
+                                vm.openModal();
+                                $scope.alert = true; 
+                            }
                         }
                     }
                 }
 
-                vm.timer --;
-            }, 1000 );
+                setMinutesAndSeconds(vm.iterations[vm.currentIteration].sections[vm.currentSection].timer); 
+
+                if( currentlyRunning == 0 && typeof interval !== 'undefined' ) {
+                    $interval.cancel(interval);
+                    intervalRunning = false; 
+                } else {
+                    intervalRunning = true; 
+                }
+
+            }, 1000);
+        }
+
+        vm.startTimer = function() {
+
+            console.log('startTimer'); 
+
+            if( !intervalRunning ){
+                startInterval(); 
+            }
+
+            vm.iterations[vm.currentIteration].sections[vm.currentSection].running = true; 
         }
 
         vm.pauseTimer = function() {
-            vm.countingDown = false;
-            $interval.cancel( interval );
+
+            vm.iterations[vm.currentIteration].sections[vm.currentSection].running = false;
         }
 
-    } );
+        vm.changeIteration = function( iteration ) {
+            vm.currentIteration = iteration; 
+            vm.resetTimer(); 
+        }
+
+        vm.changeSection = function( section ) {
+            vm.currentSection = section;
+
+            console.log('changeSection'); 
+
+            var timer = vm.iterations[vm.currentIteration].sections[vm.currentSection].timer; 
+
+            if(timer == 0) {
+
+                console.log('timer is 0'); 
+                var duration = vm.iterations[vm.currentIteration].sections[vm.currentSection].duration; 
+                vm.iterations[vm.currentIteration].sections[vm.currentSection].timer = duration; 
+                timer = duration; 
+            }
+
+            setMinutesAndSeconds( timer ); 
+        }
+
+        function setMinutesAndSeconds( timer ) {
+            vm.minutes = parseInt( timer / 60, 10 );
+            vm.seconds = parseInt( timer % 60, 10 );
+            //vm.minutes = vm.minutes < 10 ? '0' + vm.minutes : vm.minutes;
+            vm.seconds = vm.seconds < 10 ? '0' + vm.seconds : vm.seconds;
+        }
+
+        $scope.animationsEnabled = true;
+
+        vm.openModal = function(size) {
+
+            vm.pauseTimer(); 
+
+            var modalInstance = $uibModal.open({
+
+              animation: $scope.animationsEnabled,
+              templateUrl: 'modal-content.html', 
+              controller: 'ModalInstanceController',
+              size: size
+            });
+        }
+
+        $scope.$on('modal-closed', function() {
+            vm.startTimer(); 
+        }); 
+
+    } )
+
+    .controller('ModalInstanceController', function( $rootScope, $scope, $modalInstance ) { 
+
+        $scope.finished = function() {
+            $modalInstance.close();
+            $scope.alert = false;
+            $rootScope.$broadcast('modal-closed'); 
+        }
+
+    } ); 
+
