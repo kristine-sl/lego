@@ -11,7 +11,7 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
             {
                 sections: [
                     {
-                        duration: 1800,
+                        duration: 5,
                         timer: 0, 
                         running: false
                     },
@@ -100,6 +100,7 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
 
                 for( var i = 0; i < sections.length; i++ ){
 
+
                     if( sections[i].running ){
 
                         sections[i].timer--; 
@@ -118,6 +119,10 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
                             vm.openModal();
                             $scope.alert = true; 
                         }
+                    }
+
+                    if(sections[i].timer == 0) {
+                        sections[i].running = false; 
                     }
                 }
 
