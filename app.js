@@ -11,7 +11,7 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
             {
                 sections: [
                     {
-                        duration: 5,
+                        duration: 1800,
                         timer: 0, 
                         running: false
                     },
