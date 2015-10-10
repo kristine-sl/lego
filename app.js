@@ -24,12 +24,7 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
                         duration: 720,
                         timer: 0,
                         running: false, 
-                        alerts: [
-                            {
-                                after: 3,
-                                text: 'Daily standup!'
-                            }
-                        ]
+                        alert: 360
                     },
                     {
                         duration: 900,
@@ -53,7 +48,8 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
                     {
                         duration: 720,
                         timer: 0,
-                        running: false
+                        running: false, 
+                        alert: 360
                     },
                     {
                         duration: 900,
@@ -112,18 +108,15 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
 
                     var section = sections[i]; 
 
-                    if( 'alerts' in section && section.alerts.length > 0 ) {
+                    if( 'alert' in section) {
 
-                        for ( var index = 0; index < section.alerts.length; index ++ ) {
+                        var alertTime = section.duration - section.alert;
 
-                            var alertTime = section.duration - section.alerts[ index ].after;
+                        if ( section.timer == alertTime && !$scope.alert) {
 
-                            if ( section.timer == alertTime && !$scope.alert) {
-
-                                vm.pauseTimer();
-                                vm.openModal();
-                                $scope.alert = true; 
-                            }
+                            vm.pauseTimer();
+                            vm.openModal();
+                            $scope.alert = true; 
                         }
                     }
                 }
@@ -158,19 +151,17 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
 
         vm.changeIteration = function( iteration ) {
             vm.currentIteration = iteration; 
+            vm.currentSection = 0; 
             resetAllTimers(); 
         }
 
         vm.changeSection = function( section ) {
             vm.currentSection = section;
 
-            console.log('changeSection'); 
-
             var timer = vm.iterations[vm.currentIteration].sections[vm.currentSection].timer; 
 
             if(timer == 0) {
 
-                console.log('timer is 0'); 
                 var duration = vm.iterations[vm.currentIteration].sections[vm.currentSection].duration; 
                 vm.iterations[vm.currentIteration].sections[vm.currentSection].timer = duration; 
                 timer = duration; 
