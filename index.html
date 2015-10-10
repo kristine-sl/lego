@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang = 'no' ng-app = 'app'>
+    <head>
+        <meta charset = 'utf-8'>
+        <meta http-equiv = 'x-ua-compatible' content = 'ie=edge'>
+        <title>Lego</title>
+        <meta name = 'description' content = ''>
+        <meta name = 'viewport' content = 'width=device-width, initial-scale=1'>
+
+        <link rel = 'stylesheet' href = 'https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css'>
+        <link rel = 'stylesheet' href = 'assets/css/main.css'>
+    </head>
+    <body ng-controller = 'LegoController as lego'>
+
+        <header>
+
+            <h1>Praktisk bruk av Scrum</h1>
+            <h4>Lego</h4>
+
+        </header>
+
+        <main>
+
+            <h2>Iterasjon X</h2>
+            <div>
+                <a ng-click = 'lego.currentSection = 0'>Estimering</a>
+                <a ng-click = 'lego.currentSection = 1'>Godkjennelse</a>
+                <a ng-click = 'lego.currentSection = 2'>Utvikling</a>
+                <a ng-click = 'lego.currentSection = 3'>Demo/Retrospektiv</a>
+            </div>
+            <section ng-show = 'lego.currentSection == 0'>
+                <ul>
+                    <li>Få en oversikt over oppgavene</li>
+                    <li>
+                        <span>Estimer oppgavene med planning poker</span>
+                        <ul>
+                            <li>Estimer minimum 10 oppgaver</li>
+                        </ul>
+                    </li>
+                    <li>Plasser oppgavene i produktbackloggen</li>
+                </ul>
+            </section>
+            <section ng-show = 'lego.currentSection == 1'>
+                <ul>
+                    <li>Prioriter oppgavene</li>
+                    <li>Velg ut passe mengde oppgaver for 12 minutter</li>
+                    <li>Godkjennelse av kunde</li>
+                </ul>
+            </section>
+            <section ng-show = 'lego.currentSection == 2'>
+                <ul>
+                    <li>Bygg lego</li>
+                    <li>Oppdater Scrum-boardet løpende</li>
+                    <li>Daily standup</li>
+                </ul>
+            </section>
+            <section ng-show = 'lego.currentSection == 3'>
+                <ul>
+                    <li>
+                        <span>Demo</span>
+                        <ul>
+                            <li>Verifiser test</li>
+                        </ul>
+                    </li>
+                    <li>Kalkuler poeng og story points</li>
+                    <li>
+                        <span>Retrospektiv</span>
+                        <ul>
+                            <li>3 ting som var bra</li>
+                            <li>3 ting som kan bli bedre</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <div>
+                {{ lego.minutes }}:{{ lego.seconds }}
+                <button ng-if = '! lego.countingDown' ng-click = 'lego.startTimer( lego.currentIteration, lego.currentSection )'>Start timer</button>
+                <button ng-if = 'lego.countingDown' ng-click = 'lego.pauseTimer()'>Stopp timer</button>
+            </div>
+
+        </main>
+
+        <script src = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular.min.js'></script>
+        <script src = 'app.js'></script>
+
+    </body>
+</html>
