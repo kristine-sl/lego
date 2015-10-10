@@ -115,3 +115,20 @@ button {
 {
 	flex-grow: 1;
 }
+
+.daily-standup-modal h3 
+{
+	font-size: 30px; 
+	padding-left: 20px; 
+}
+
+.daily-standup-modal ul 
+{
+	font-size: 22px; 
+	padding: 20px 0 20px 40px;
+}
+
+.daily-standup-modal li
+{
+	padding: 10px 0;
+}

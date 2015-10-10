@@ -70,19 +70,24 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
             setMinutesAndSeconds(duration); 
         }
 
+        vm.resetTimer();
+
         function resetAllTimers() {
 
-            for(var i = 0; i < vm.iterations; i++) {
+            for(var i = 0; i < vm.iterations.length; i++) {
 
-                for(var j = 0; j < iterations[i].sections.length; j++) {
+                var sections = vm.iterations[i].sections;  
+
+                for(var j = 0; j < sections.length; j++) {
 
                     sections[j].timer = sections[j].duration; 
                     sections[j].running = false; 
                 }
             }
-        }
 
-        vm.resetTimer(); 
+            var timer = vm.iterations[vm.currentIteration].sections[vm.currentSection].timer; 
+            setMinutesAndSeconds( timer ); 
+        }
 
         var intervalRunning = false;
         var interval; 
@@ -153,7 +158,7 @@ angular.module( 'app', [ 'ui.bootstrap' ] )
 
         vm.changeIteration = function( iteration ) {
             vm.currentIteration = iteration; 
-            vm.resetTimer(); 
+            resetAllTimers(); 
         }
 
         vm.changeSection = function( section ) {
