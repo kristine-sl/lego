@@ -2,6 +2,13 @@
   display: none !important;
 }
 
+html
+{
+	position: relative;
+    margin-bottom: -100px;
+    padding-bottom: 100px; 
+}
+
 body
 {
 	font-family: 'Nunito', sans-serif;
@@ -12,13 +19,11 @@ header
 {
 	padding: 40px 0;
 	background: #f2f2f2;
-	display: flex; 
-	align-items: center;
 }
 
-.header-section
+.iteration-header
 {
-	flex: 1;
+	text-align: right; 
 }
 
 .iteration
@@ -35,7 +40,6 @@ header
 .iteration-divider
 {
 	font-weight: 200; 
-	font-size: 40px; 
 	color: lightgray; 
 	padding: 0 10px; 
 }
@@ -91,11 +95,35 @@ h2
 	font-weight: 600;
 }
 
+.small-nav-bar h4
+{
+	padding: 20px 0;
+	text-align: center;
+	width: 100%;
+	border-bottom: 1px solid lightgray;  
+	margin: 0;
+	background: #f2f2f2;
+	font-weight: 200; 
+	text-transform: uppercase;
+}
+
+.small-nav-bar h4:hover
+{
+	background: #fdfdfd; 
+	cursor: pointer; 
+}
+
+.small-nav-bar .is-active
+{
+	background: #fff; 
+	font-weight: 600; 
+}
+
 .Container
 {
-	display: flex;
-	align-items: center;
-	padding-top: 40px; 
+	/*display: flex;
+	align-items: center;*/
+	padding-top: 70px; 
 	height: 400px; 
 }
 
@@ -113,11 +141,6 @@ button {
 .tasks-container li
 {
 	padding: 10px 0;
-}
-
-.timer-container
-{
-	flex-grow: 1;
 }
 
 .daily-standup-modal h3 
@@ -150,4 +173,36 @@ footer p
 {
 	margin: 0;
 	color: gray;
+}
+
+@media(max-width: 992px)
+{
+	header, .iteration-header
+	{
+		text-align: center;
+	}
+
+	header h2, iteration-header h2
+	{
+		font-size: 26px;
+	}
+
+	.iteration-header h2
+	{
+		padding-top: 30px; 
+	}
+
+	.timer
+	{
+		font-size: 100px;
+	}
+
+	.tasks-container
+	{
+		display: flex;
+		justify-content: center;
+		font-size: 18px;
+		width: 100%;
+		padding-top: 50px; 
+	}
 }

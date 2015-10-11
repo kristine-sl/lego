@@ -14,11 +14,11 @@
     </head>
     <body ng-controller = 'LegoController as lego' ng-cloak>
 
-        <header>
-            <div class = 'header-section'>
+        <header class = 'row'>
+            <div class = 'header-section col-xs-12 col-md-6'>
                 <h2>Praktisk bruk av Scrum: <strong>Lego</strong></h2>
             </div>
-            <div class = 'header-section text-right'>
+            <div class = 'header-section iteration-header col-xs-12 col-md-6'>
                 <h2>
                    <span class = 'iteration' ng-class = "{ 'header-active': lego.currentIteration == 0 }" ng-click = 'lego.changeIteration( 0 )'>Iterasjon 1</span>
                    <span class = 'iteration-divider'>|</span>
@@ -29,16 +29,23 @@
         </header>
 
         <main>
-            <uib-tabset justified='true'>
+            <uib-tabset justified='true' class = 'hidden-sm hidden-xs'>
                 <uib-tab heading='Estimering' ng-click = 'lego.changeSection( 0 )' active = 'lego.currentSection == 0'></uib-tab>
                 <uib-tab heading='Godkjennelse' ng-click = 'lego.changeSection( 1 )' active = 'lego.currentSection == 1'></uib-tab>
                 <uib-tab heading='Utvikling' ng-click = 'lego.changeSection( 2 )' active = 'lego.currentSection == 2'></uib-tab>
                 <uib-tab heading='Demo / Retrospektiv' ng-click = 'lego.changeSection( 3 )' active = 'lego.currentSection == 3'></uib-tab>
-            </uib-tabset> 
+            </uib-tabset>
 
-            <div class = 'Container'>
+            <div class = 'small-nav-bar hidden-md hidden-lg'>
+                <h4 ng-click = 'lego.changeSection( 0 )' ng-class = "{'is-active': lego.currentSection == 0 }">Estimering</h4>
+                <h4 ng-click = 'lego.changeSection( 1 )' ng-class = "{'is-active': lego.currentSection == 1 }">Godkjennelse</h4>
+                <h4 ng-click = 'lego.changeSection( 2 )' ng-class = "{'is-active': lego.currentSection == 2 }">Utvikling</h4>
+                <h4 ng-click = 'lego.changeSection( 3 )' ng-class = "{'is-active': lego.currentSection == 3 }">Demo / Retrospektiv</h4>
+            </div>
+
+            <div class = 'Container row'>
                 
-                <div class = 'timer-container'>
+                <div class = 'timer-container col-xs-12 col-md-6'>
                     <h1 class = 'text-center timer' >{{ lego.minutes }}:{{ lego.seconds }}</h1>
                     <div class = 'text-center'>
                         <button class = 'btn btn-success btn-lg' ng-if = '! lego.iterations[lego.currentIteration].sections[lego.currentSection].running' ng-click = 'lego.startTimer()'>Start timer</button>
@@ -47,7 +54,7 @@
                     </div>
                 </div>
 
-                <div class = 'tasks-container'>
+                <div class = 'tasks-container col-xs-12 col-md-6'>
                     <section ng-show = 'lego.currentSection == 0 '>
                         <ul>
                             <li>Få en oversikt over oppgavene</li>
@@ -98,7 +105,7 @@
         </main>
 
         <footer>
-            <p class = 'text-center'>Laget i sammenheng med Scrum-øvelse ved Westerdals Oslo ACT</p>
+            <p class = 'text-center'>Westerdals Oslo ACT</p>
         </footer>
 
         <script type="text/ng-template" id="modal-content.html">
